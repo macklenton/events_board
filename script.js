@@ -35,7 +35,12 @@ nextThreeEvents.forEach((event , index)=>{
 });
 
 
+function isUpcoming(){
+     const today = new Date();
+    today.setHours(0,0,0,0);
+    const date = new Date(event.date)
 
+}
 
 
 
@@ -172,4 +177,3 @@ let events = [
 ];
 console.log(events);
 console.log(events.length);
-
