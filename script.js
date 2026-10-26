@@ -1,27 +1,41 @@
+const upcomingSummary = document.getElementById("upcoming-summary");
+const upcomingList= document.getElementById("upcoming-list");
+const eventList = document.getElementById("event-list");
+const resultsCount = document.getElementById("results-count")
+console.log("Upcoming summary:", upcomingSummary);
+console.log("Upcoming list:", upcomingList);
+console.log("Event list:", eventList);
+console.log("Results count:", resultsCount);
+
+
 function daysFromNow(days, hour) {
     const date = new Date();
 
     // Move the date forward by the specified number of days
     date.setDate(date.getDate() + days);
 
-    // Add zero to single digit numbers
+    // Add zero to single-digit numbers
     const pad = (n) => String(n).padStart(2, "0");
 
-    // Return the date and time 
-    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} T${pad(hour)}:00`;
+    // Return the date and time
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(hour)}:00`;
 }
 
 console.log(daysFromNow());
-const upComingEvents =  events.filter((event)=> {
+
+// FILTER & SORTING 
+const getupComingEvents =  events.filter((event)=> {
     const now = new Date();
-    return event.date >= now;
+    return new Date(event.date )>= now;
     
     
 });
-upComingEvents.sort((a,b)=>{
-    return a.date - b.date
+
+getupComingEvents.sort((a,b)=>{
+    return new Date(a.date) - new Date(b.date)
     
 });
+
 const nextThreeEvents = upComingEvents.slice(0, 3)
 const totalUpComingEvents = upComingEvents.length;
 
