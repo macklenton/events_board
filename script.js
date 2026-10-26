@@ -36,8 +36,8 @@ getupComingEvents.sort((a,b)=>{
     
 });
 
-const nextThreeEvents = upComingEvents.slice(0, 3)
-const totalUpComingEvents = upComingEvents.length;
+const nextThreeEvents = getupComingEvents.slice(0, 3)
+const totalUpComingEvents = getupComingEvents.length;
 
 
 
@@ -49,19 +49,22 @@ nextThreeEvents.forEach((event , index)=>{
 });
 
 
-function isUpcoming(){
+function isUpcoming(event){
      const today = new Date();
-    today.setHours(0,0,0,0);
     const date = new Date(event.date)
+    return date > today;
 
 }
 
 
 
-function eventCalculation(eventDate){
+
+// EVENT DAY LABELS
+
+function getDayLabel(event){
     const today = new Date();
     today.setHours(0,0,0,0);
-    const date = new Date(eventDate)
+    const date = new Date(event.date)
     date.setHours(0,0,0,0);
 
     const difference = date - today;
@@ -69,15 +72,18 @@ function eventCalculation(eventDate){
 
     if (daysUntilEvent === 0){
          return "today";
-}else if(daysUntilEvent == 1){
+}else if(daysUntilEvent === 1){
          return "Tomorrow";
 }else if(daysUntilEvent > 1){
-        return `Event in ${daysUntilEvent} days`;
+        return `In ${daysUntilEvent} days`;
+}
+return "Past event";
+
 }
 
 
-}
-eventCalculation();
+
+console.log(getDayLabel(events[0]));
 
 let events = [
     {
