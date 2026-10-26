@@ -7,7 +7,6 @@ console.log("Upcoming list:", upcomingList);
 console.log("Event list:", eventList);
 console.log("Results count:", resultsCount);
 
-
 function daysFromNow(days, hour) {
     const date = new Date();
 
@@ -20,70 +19,6 @@ function daysFromNow(days, hour) {
     // Return the date and time
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(hour)}:00`;
 }
-
-console.log(daysFromNow());
-
-// FILTER & SORTING 
-const getupComingEvents =  events.filter((event)=> {
-    const now = new Date();
-    return new Date(event.date )>= now;
-    
-    
-});
-
-getupComingEvents.sort((a,b)=>{
-    return new Date(a.date) - new Date(b.date)
-    
-});
-
-const nextThreeEvents = getupComingEvents.slice(0, 3)
-const totalUpComingEvents = getupComingEvents.length;
-
-
-
-nextThreeEvents.forEach((event , index)=>{
-    if(index === 0){
-        console.log("Next Up")
-    }
-    console.log(event.title)
-});
-
-
-function isUpcoming(event){
-     const today = new Date();
-    const date = new Date(event.date)
-    return date > today;
-
-}
-
-
-
-
-// EVENT DAY LABELS
-
-function getDayLabel(event){
-    const today = new Date();
-    today.setHours(0,0,0,0);
-    const date = new Date(event.date)
-    date.setHours(0,0,0,0);
-
-    const difference = date - today;
-    const daysUntilEvent = difference / 86400000
-
-    if (daysUntilEvent === 0){
-         return "today";
-}else if(daysUntilEvent === 1){
-         return "Tomorrow";
-}else if(daysUntilEvent > 1){
-        return `In ${daysUntilEvent} days`;
-}
-return "Past event";
-
-}
-
-
-
-console.log(getDayLabel(events[0]));
 
 let events = [
     {
@@ -195,5 +130,93 @@ let events = [
         spotsLeft: 150
     }
 ];
-console.log(events);
-console.log(events.length);
+
+console.log( "Total events:", events.length);
+
+// FILTER & SORTING 
+const getupComingEvents =  events.filter((event)=> {
+    const now = new Date();
+    return new Date(event.date )>= now;
+    
+    
+});
+
+getupComingEvents.sort((a,b)=>{
+    return new Date(a.date) - new Date(b.date)
+    
+});
+
+
+
+
+
+//CHECK UPCOMING EVENTS
+function isUpcoming(event){
+     const today = new Date();
+    const date = new Date(event.date)
+
+    return date > today;
+
+}
+
+
+// EVENT DAY LABELS
+
+function getDayLabel(event){
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const date = new Date(event.date)
+    date.setHours(0,0,0,0);
+
+    const difference = date - today;
+    const daysUntilEvent = difference / 86400000
+
+    if (daysUntilEvent === 0){
+         return "today";
+}else if(daysUntilEvent === 1){
+         return "Tomorrow";
+}else if(daysUntilEvent > 1){
+        return `In ${daysUntilEvent} days`;
+}
+return "Past event";
+
+}
+
+
+
+console.log(getDayLabel(events[0]));
+
+
+const nextThreeEvents = getupComingEvents.slice(0, 3)
+const totalUpComingEvents = getupComingEvents.length;
+
+// DISPLAYING EVENTS
+upcomingSummary.textContent = `${totalUpComingEvents} upcoming events`;
+nextThreeEvents.forEach((event , index)=>{
+    const eventItem = document.createElement("div")
+    
+
+    
+
+    if(index === 0){
+        const eventLabel = document.createElement("p")
+        eventLabel.textContent ="Next Up"
+        eventItem.appendChild(eventLabel)
+    }
+    const eventTitle = document.createElement("h3")
+    eventTitle.textContent = event.title
+    eventItem.appendChild(eventTitle)
+
+    const eventVenue =  document.createElement("p");
+    eventVenue.textContent = event.venue;
+    eventItem.appendChild(eventVenue)
+
+    const eventDay = document.createElement("p");
+    eventDay.textContent = getDayLabel(event);
+    eventItem.appendChild(eventDay);
+
+    upcomingList.appendChild(eventItem)
+});
+console.log("Upcoming events:", getupComingEvents);
+console.log("Next three events:", nextThreeEvents);
+
