@@ -3,8 +3,10 @@ const upcomingList= document.getElementById("upcoming-list");
 const eventList = document.getElementById("event-list");
 const resultsCount = document.getElementById("results-count")
 const upcomingEvents = document.getElementById("upcoming-events");
-const pastEvents = document.getElementById("past-events")
-const bookbtn = document.getElementById("container")
+const pastEvents = document.getElementById("past-events");
+const bookbtn = document.getElementById("container");
+const searchInput = document.getElementById("search");
+const categoryFilters = document.getElementById("category-filters");
 console.log("Upcoming summary:", upcomingSummary);
 console.log("Upcoming list:", upcomingList);
 console.log("Event list:", eventList);
@@ -379,3 +381,56 @@ function formatEeventPrice(event){
         return `KES ${event.price }`
     }
 }
+
+//SEARCH FUNCTION
+let selectedCategory = "All";
+const getCategories = ["All", ...new Set(
+    events.map(event => event.category)
+   
+    
+)];
+
+getCategories.forEach(category =>{
+        const categorybtn = document.createElement("button");
+        categorybtn.textContent = category;
+        categorybtn.addEventListener('click',() =>{
+            selectedCategory = category;
+            console.log("Selected Category:", selectedCategory)
+
+            searchEvent();
+        });
+        categoryFilters.appendChild(categorybtn)
+        
+
+    });
+function searchEvent(){
+    const searchLaw = searchInput.value.trim().toLowerCase();
+    const filteredEvents = events.filter(event =>{
+        const matchSearch = event.title.toLowerCase().includes(searchLaw);
+        const matchCategory = selectedCategory==="All" ||
+        event.category === selectedCategory;
+
+        return matchCategory && matchSearch;
+    });
+    eventList.innerHTML ="";
+    filteredEvents.forEach(event =>{
+        const eventItem = document.createElement("li");
+
+        const eventTitle = document.createElement("h3");
+        eventTitle.textContent = event.title;
+
+        const eventCategory = document.createElement("p");
+        eventCategory.textContent = event.category;
+
+        eventTitle.textContent = event.title;
+        eventItem.appendChild(eventTitle);
+        eventList.appendChild(eventItem);
+    })
+    resultsCount.textContent =
+        `${filteredEvents.length} events found`;
+    
+    console.log(filteredEvents)
+}
+searchInput.addEventListener("input", () => {
+    searchEvent();
+});
