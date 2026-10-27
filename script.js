@@ -2,10 +2,13 @@ const upcomingSummary = document.getElementById("upcoming-summary");
 const upcomingList= document.getElementById("upcoming-list");
 const eventList = document.getElementById("event-list");
 const resultsCount = document.getElementById("results-count")
+const upcomingEvents = document.getElementById("upcoming-events");
+const pastEvents = document.getElementById("past-events")
 console.log("Upcoming summary:", upcomingSummary);
 console.log("Upcoming list:", upcomingList);
 console.log("Event list:", eventList);
 console.log("Results count:", resultsCount);
+
 
 function daysFromNow(days, hour) {
     const date = new Date();
@@ -13,12 +16,33 @@ function daysFromNow(days, hour) {
     // Move the date forward by the specified number of days
     date.setDate(date.getDate() + days);
 
-    // Add zero to single-digit numbers
-    const pad = (n) => String(n).padStart(2, "0");
-
-    // Return the date and time
-    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(hour)}:00`;
+    // Set Hours
+    date.setHours(hour, 0,0,0);
+    // Return the date
+    return date;
 }
+
+function formatDate(event) {
+    const date = new Date(event.date);
+
+    const datePart = date.toLocaleDateString("en-GB", {
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    });
+
+    const timePart = date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true
+    });
+
+    return `${datePart} · ${timePart}`;
+}
+
+
+
 
 let events = [
     {
@@ -132,6 +156,7 @@ let events = [
 ];
 
 console.log( "Total events:", events.length);
+console.log(formatDate(events[0]));
 
 // FILTER & SORTING 
 const getupComingEvents =  events.filter((event)=> {
@@ -215,8 +240,27 @@ nextThreeEvents.forEach((event , index)=>{
     eventDay.textContent = getDayLabel(event);
     eventItem.appendChild(eventDay);
 
+    const eventDate = document.createElement("p");
+    eventDate.textContent = formatDate(event);
+    eventItem.appendChild(eventDate);
+
+    const eventPrice = document.createElement("p");
+    eventPrice.textContent = formatEeventPrice(event);
+    eventItem.appendChild(eventPrice)
+
+
     upcomingList.appendChild(eventItem)
 });
 console.log("Upcoming events:", getupComingEvents);
 console.log("Next three events:", nextThreeEvents);
 
+
+// PRICE FUNCTION
+function formatEeventPrice(event){
+    if( event.price === 0){
+        return "Free"
+    }
+    else{
+        return `KES ${event.price }`
+    }
+}
