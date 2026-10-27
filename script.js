@@ -253,7 +253,38 @@ function getspotsLeft(event){
     }
 
 }
+//DISPLAY PAST EVENTS
+pastEvents.textContent = `${totalPastEvents} past events`
+getPastEvents.forEach((event, index)=>{
+    const pastItems = document. createElement("div");
 
+
+    const pastTitle = document.createElement("h3")
+    pastTitle.textContent = event.title
+    pastItems.appendChild(pastTitle)
+
+    pastEvents.appendChild(pastItems) // appended to my html
+
+    const pastVenue =  document.createElement("p");
+    pastVenue.textContent = event.venue;
+    pastItems.appendChild(pastVenue)
+
+    const pastDay = document.createElement("p");
+    pastDay.textContent = getDayLabel(event);
+    pastItems.appendChild(pastDay);
+
+    const pastDate = document.createElement("p");
+    pastDate.textContent = formatDate(event);
+    pastItems.appendChild(pastDate);
+
+    const pastPrice = document.createElement("p");
+    pastPrice.textContent = formatEeventPrice(event);
+    pastItems.appendChild(pastPrice)
+
+
+
+
+});
 //DISPLAY ALL EVENTS
 upcomingEvents.textContent = `${totalUpComingEvents} upcoming events`;
 getupComingEvents.forEach((event, index)=>{
