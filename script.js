@@ -8,6 +8,8 @@ console.log("Upcoming summary:", upcomingSummary);
 console.log("Upcoming list:", upcomingList);
 console.log("Event list:", eventList);
 console.log("Results count:", resultsCount);
+console.log("Upcoming Events:", upcomingEvents);
+console.log("Past Events:", pastEvents);
 
 
 function daysFromNow(days, hour) {
@@ -142,7 +144,7 @@ let events = [
         date: daysFromNow(45, 9),
         venue: "Karen, Nairobi",
         price: 0,
-        spotsLeft: 1
+        spotsLeft: 0
     },
     {
         id: 12,
@@ -171,9 +173,17 @@ getupComingEvents.sort((a,b)=>{
     
 });
 
+const getPastEvents = events.filter((event) =>{
+    const now = new Date();
+    return new Date(event.date)<= now;
+})
 
-
-
+// CHECK PAST EVENTS
+function isPast(event){
+    const today = new Date();
+    const past = newDate(event.date)
+    return past < today
+}
 
 //CHECK UPCOMING EVENTS
 function isUpcoming(event){
@@ -214,8 +224,49 @@ console.log(getDayLabel(events[0]));
 
 const nextThreeEvents = getupComingEvents.slice(0, 3)
 const totalUpComingEvents = getupComingEvents.length;
+const totalPastEvents = getPastEvents.length
 
-// DISPLAYING EVENTS
+
+
+//DISPLAY ALL EVENTS
+upcomingEvents.textContent = `${totalUpComingEvents} upcoming events and ${totalPastEvents} past events`;
+getupComingEvents.forEach((event, index)=>{
+    const upcomingItems = document.createElement("div")
+
+    const itemTitle = document.createElement("h3")
+    itemTitle.textContent = event.title
+    upcomingItems.appendChild(itemTitle)
+
+    upcomingEvents.appendChild(upcomingItems);// appended to my html id
+    
+    const itemVenue =  document.createElement("p");
+    itemVenue.textContent = event.venue;
+    upcomingItems.appendChild(itemVenue)
+
+    const itemDay = document.createElement("p");
+    itemDay.textContent = getDayLabel(event);
+    upcomingItems.appendChild(itemDay);
+
+    const itemDate = document.createElement("p");
+    itemDate.textContent = formatDate(event);
+    upcomingItems.appendChild(itemDate);
+
+    const itemPrice = document.createElement("p");
+    itemPrice.textContent = formatEeventPrice(event);
+    upcomingItems.appendChild(itemPrice)
+
+    if(event.spotsLeft >= 1){
+        const nextItem = document.createElement("p")
+        nextItem.textContent = "Fully Booked"       
+    }
+
+
+
+    
+});
+
+
+// DISPLAYING UPCOMING EVENTS
 upcomingSummary.textContent = `${totalUpComingEvents} upcoming events`;
 nextThreeEvents.forEach((event , index)=>{
     const eventItem = document.createElement("div")
@@ -231,6 +282,8 @@ nextThreeEvents.forEach((event , index)=>{
     const eventTitle = document.createElement("h3")
     eventTitle.textContent = event.title
     eventItem.appendChild(eventTitle)
+
+
 
     const eventVenue =  document.createElement("p");
     eventVenue.textContent = event.venue;
@@ -251,8 +304,11 @@ nextThreeEvents.forEach((event , index)=>{
 
     upcomingList.appendChild(eventItem)
 });
+
 console.log("Upcoming events:", getupComingEvents);
 console.log("Next three events:", nextThreeEvents);
+console.log("Past Events:", getPastEvents);
+
 
 
 // PRICE FUNCTION
