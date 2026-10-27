@@ -4,6 +4,7 @@ const eventList = document.getElementById("event-list");
 const resultsCount = document.getElementById("results-count")
 const upcomingEvents = document.getElementById("upcoming-events");
 const pastEvents = document.getElementById("past-events")
+const bookbtn = document.getElementById("container")
 console.log("Upcoming summary:", upcomingSummary);
 console.log("Upcoming list:", upcomingList);
 console.log("Event list:", eventList);
@@ -228,10 +229,36 @@ const totalPastEvents = getPastEvents.length
 
 
 
+
+// SPOTS LEFT AND BUTTON 
+function getspotsLeft(event){
+    if(event.spotsLeft >=1){
+
+
+        const myButton = document.createElement("button");
+        myButton.textContent = `Book Event`
+        myButton.disabled = false;
+        upcomingEvents.appendChild(myButton)
+        return event.spotsLeft
+
+        
+    }else {
+        const myButton = document.createElement("button");
+        myButton.textContent = `Fully Booked`
+        myButton.disabled = true;
+        upcomingEvents.appendChild(myButton)
+        return event.spotsLeft
+
+        
+    }
+
+}
+
 //DISPLAY ALL EVENTS
-upcomingEvents.textContent = `${totalUpComingEvents} upcoming events and ${totalPastEvents} past events`;
+upcomingEvents.textContent = `${totalUpComingEvents} upcoming events`;
 getupComingEvents.forEach((event, index)=>{
     const upcomingItems = document.createElement("div")
+    
 
     const itemTitle = document.createElement("h3")
     itemTitle.textContent = event.title
@@ -255,10 +282,11 @@ getupComingEvents.forEach((event, index)=>{
     itemPrice.textContent = formatEeventPrice(event);
     upcomingItems.appendChild(itemPrice)
 
-    if(event.spotsLeft >= 1){
-        const nextItem = document.createElement("p")
-        nextItem.textContent = "Fully Booked"       
-    }
+    const itemspotsLeft = document.createElement("p")
+    itemspotsLeft.textContent = getspotsLeft(event);
+    upcomingItems.appendChild(itemspotsLeft)
+    
+    
 
 
 
