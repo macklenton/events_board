@@ -143,7 +143,7 @@ let events = [
     date: daysFromNow(45, 9),
     venue: "Karen, Nairobi",
     price: 0,
-    spotsLeft: 0,
+    spotsLeft: 1,
   },
   {
     id: 12,
@@ -216,24 +216,28 @@ const nextThreeEvents = getupComingEvents.slice(0, 3);
 const totalUpComingEvents = getupComingEvents.length;
 const totalPastEvents = getPastEvents.length;
 
-// SPOTS LEFT AND BUTTON
+// SPOTS LEFT AND BUTTON FUNCTION
 function getspotsLeft(event) {
-  if (event.spotsLeft >= 1) {
-    const myButton = document.createElement("button");
-    myButton.textContent = "Register";
-    myButton.dataset.id = event.id;
-    myButton.className = "register-btn";
-    myButton.disabled = false;
-    upcomingEvents.appendChild(myButton);
+  
     return event.spotsLeft;
    
+}
+
+function getRegisterButton(event) {
+  const myButton = document.createElement("button");
+
+  myButton.dataset.id = event.id;
+  myButton.className = "register-btn";
+
+  if (event.spotsLeft >= 1) {
+    myButton.textContent = "Register";
+    myButton.disabled = false;
   } else {
-    const myButton = document.createElement("button");
-    myButton.textContent = `Fully Booked`;
+    myButton.textContent = "Fully Booked";
     myButton.disabled = true;
-    upcomingEvents.appendChild(myButton);
-    return event.spotsLeft;
   }
+
+  return myButton;
 }
 //DISPLAY PAST EVENTS
 pastEvents.textContent = `${totalPastEvents} past events`;
@@ -294,6 +298,9 @@ getupComingEvents.forEach((event, index) => {
   itemspotsLeft.dataset.id = event.id;
   itemspotsLeft.textContent = `${getspotsLeft(event)} Spots left`;
   upcomingItems.appendChild(itemspotsLeft);
+
+  const registerButton = getRegisterButton(event);
+  upcomingItems.appendChild(registerButton);
 });
 
 // DISPLAYING UPCOMING EVENTS
