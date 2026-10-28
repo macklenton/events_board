@@ -241,6 +241,7 @@ function getRegisterButton(event) {
 }
 //DISPLAY PAST EVENTS
 pastEvents.textContent = `${totalPastEvents} past events`;
+pastEvents.style.fontSize = "30px"
 getPastEvents.forEach((event, index) => {
   const pastItems = document.createElement("div");
 
@@ -268,6 +269,9 @@ getPastEvents.forEach((event, index) => {
 });
 //DISPLAY ALL EVENTS
 upcomingEvents.textContent = `${totalUpComingEvents} upcoming events`;
+upcomingEvents.style.fontSize = "30px"
+
+
 getupComingEvents.forEach((event, index) => {
   const upcomingItems = document.createElement("div");
 
@@ -305,6 +309,7 @@ getupComingEvents.forEach((event, index) => {
 
 // DISPLAYING UPCOMING EVENTS
 upcomingSummary.textContent = `${totalUpComingEvents} upcoming events`;
+upcomingSummary.style.fontSize = "30px"
 nextThreeEvents.forEach((event, index) => {
   const eventItem = document.createElement("div");
 
