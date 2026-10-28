@@ -218,30 +218,13 @@ const totalPastEvents = getPastEvents.length;
 
 // SPOTS LEFT AND BUTTON FUNCTION
 function getspotsLeft(event) {
-  
-    return event.spotsLeft;
-   
+  return event.spotsLeft;
 }
 
-function getRegisterButton(event) {
-  const myButton = document.createElement("button");
 
-  myButton.dataset.id = event.id;
-  myButton.className = "register-btn";
-
-  if (event.spotsLeft >= 1) {
-    myButton.textContent = "Register";
-    myButton.disabled = false;
-  } else {
-    myButton.textContent = "Fully Booked";
-    myButton.disabled = true;
-  }
-
-  return myButton;
-}
 //DISPLAY PAST EVENTS
 pastEvents.textContent = `${totalPastEvents} past events`;
-pastEvents.style.fontSize = "30px"
+pastEvents.style.fontSize = "30px";
 getPastEvents.forEach((event, index) => {
   const pastItems = document.createElement("div");
 
@@ -269,8 +252,7 @@ getPastEvents.forEach((event, index) => {
 });
 //DISPLAY ALL EVENTS
 upcomingEvents.textContent = `${totalUpComingEvents} upcoming events`;
-upcomingEvents.style.fontSize = "30px"
-
+upcomingEvents.style.fontSize = "30px";
 
 getupComingEvents.forEach((event, index) => {
   const upcomingItems = document.createElement("div");
@@ -284,6 +266,12 @@ getupComingEvents.forEach((event, index) => {
   const itemVenue = document.createElement("p");
   itemVenue.textContent = event.venue;
   upcomingItems.appendChild(itemVenue);
+
+  const itemCategory = document.createElement("p");
+  itemCategory.textContent = event.category;
+  itemCategory.style.color = "blue";
+  itemCategory.style.fontWeight = "bold";
+  upcomingItems.appendChild(itemCategory);
 
   const itemDay = document.createElement("p");
   itemDay.textContent = getDayLabel(event);
@@ -309,7 +297,7 @@ getupComingEvents.forEach((event, index) => {
 
 // DISPLAYING UPCOMING EVENTS
 upcomingSummary.textContent = `${totalUpComingEvents} upcoming events`;
-upcomingSummary.style.fontSize = "30px"
+upcomingSummary.style.fontSize = "30px";
 nextThreeEvents.forEach((event, index) => {
   const eventItem = document.createElement("div");
 
@@ -321,6 +309,13 @@ nextThreeEvents.forEach((event, index) => {
   const eventTitle = document.createElement("h3");
   eventTitle.textContent = event.title;
   eventItem.appendChild(eventTitle);
+
+  const eventCategory = document.createElement("p");
+  eventCategory.textContent = event.category;
+  eventCategory.style.color = "blue";
+  eventCategory.style.fontWeight = "bold";
+
+  eventItem.appendChild(eventCategory);
 
   const eventVenue = document.createElement("p");
   eventVenue.textContent = event.venue;
@@ -387,9 +382,11 @@ function searchEvent() {
 
     return matchCategory && matchSearch;
   });
+
   eventList.innerHTML = "";
+
   if (filteredEvents.length === 0) {
-    resultsCount.textContent = `No events match "${searchTerm}"`;
+    resultsCount.textContent = `No events match "${searchLaw}" in ${selectedCategory}`;
 
     return;
   }
@@ -399,12 +396,38 @@ function searchEvent() {
 
     const eventTitle = document.createElement("h3");
     eventTitle.textContent = event.title;
+    eventItem.appendChild(eventTitle);
 
     const eventCategory = document.createElement("p");
     eventCategory.textContent = event.category;
+    eventCategory.style.color = "blue";
+    eventCategory.style.fontWeight = "bold";
+
+    eventItem.appendChild(eventCategory);
+
+    const eventVenue = document.createElement("p");
+    eventVenue.textContent = `Venue: ${event.venue}`;
+    eventItem.appendChild(eventVenue);
+
+    const eventDate = document.createElement("p");
+    eventDate.textContent = formatDate(event);
+    eventItem.appendChild(eventDate);
+
+    const eventPrice = document.createElement("p");
+    eventPrice.textContent = formatEeventPrice(event);
+    eventItem.appendChild(eventPrice);
+
+    const spotsText = document.createElement("p");
+    spotsText.className = "spots-left";
+    spotsText.dataset.id = event.id;
+    spotsText.textContent = `${event.spotsLeft} Spots left`;
+    eventItem.appendChild(spotsText);
+
+    const registerButton = getRegisterButton(event);
+    eventItem.appendChild(registerButton);
 
     eventTitle.textContent = event.title;
-    eventItem.appendChild(eventTitle);
+
     eventList.appendChild(eventItem);
   });
   resultsCount.textContent = `${filteredEvents.length} events found`;
@@ -415,11 +438,9 @@ searchInput.addEventListener("input", () => {
   searchEvent();
 });
 
-
 //FUNTION TO UPDATE PAGE WHEN USER REGISTERS AND SPOTS DECREASES
 
 function updateSpotsDisplay(selectedEvent) {
-  
   const spotsParagraphs = document.querySelectorAll(".spots-left");
 
   spotsParagraphs.forEach((paragraph) => {
@@ -427,8 +448,8 @@ function updateSpotsDisplay(selectedEvent) {
       paragraph.textContent = `${selectedEvent.spotsLeft} Spots left`;
     }
   });
-
   
+
   const registerButtons = document.querySelectorAll(".register-btn");
 
   registerButtons.forEach((button) => {
@@ -442,6 +463,46 @@ function updateSpotsDisplay(selectedEvent) {
 }
 
 
+const main = document.querySelector("main");
+
+//LISTENER FOR ALL CLICKS 
+main.addEventListener("click", (event) => {
+  if (event.target.classList.contains("register-btn")) {
+    const eventId = Number(event.target.dataset.id);
+
+    const selectedEvent = events.find((event) => {
+      return event.id === eventId;
+    });
+
+    if (selectedEvent && selectedEvent.spotsLeft > 0) {
+      selectedEvent.spotsLeft--;
+
+      updateSpotsDisplay(selectedEvent);
+    }
+  }
+});
+
+
+
+
+//REGISTER BUTTON
+function getRegisterButton(event) {
+  const myButton = document.createElement("button");
+
+  myButton.dataset.id = event.id;
+  myButton.className = "register-btn";
+
+  if (event.spotsLeft >= 1) {
+    myButton.textContent = "Register";
+    myButton.disabled = false;
+  } else {
+    myButton.textContent = "Fully Booked";
+    myButton.disabled = true;
+  }
+
+  return myButton;
+}
+
 // REGISTER FUNCTION
 
 upcomingEvents.addEventListener("click", (event) => {
@@ -452,13 +513,12 @@ upcomingEvents.addEventListener("click", (event) => {
 
     if (selectedEvent && selectedEvent.spotsLeft > 0) {
       selectedEvent.spotsLeft--;
-      updateSpotsDisplay(selectedEvent)
+      updateSpotsDisplay(selectedEvent);
     }
 
     if (selectedEvent.spotsLeft === 0) {
       event.target.textContent = "Fully Booked";
       event.target.disabled = true;
     }
-    
   }
 });
